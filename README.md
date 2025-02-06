@@ -1,4 +1,4 @@
-# Org Dash Queries Assistant
+# AI SDK Playground
 
 A modern Next.js application that provides an interactive interface for AI-powered chat, UI generation, and data visualization. Built with TypeScript and integrated with various AI models including GPT-4 and GROQ.
 
