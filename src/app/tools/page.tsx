@@ -3,6 +3,21 @@
 import { useChat } from 'ai/react';
 import { type Message } from 'ai';
 
+// Add these type definitions at the top of the file
+type ToolInvocationType = {
+    toolName: string;
+    toolCallId: string;
+    state: 'call' | 'result' | 'partial-call';
+    args?: any;
+    result?: string;
+};
+
+type MessagePart = {
+    type: 'text' | 'tool-invocation';
+    text?: string;
+    toolInvocation?: ToolInvocationType;
+};
+
 // Main Page Component
 export default function Page() {
     const { messages, input, handleInputChange, handleSubmit, addToolResult } =
@@ -81,7 +96,13 @@ function MessageItem({
 }
 
 // Message Part Component
-function MessagePart({ part, addToolResult }) {
+function MessagePart({ 
+    part, 
+    addToolResult 
+}: { 
+    part: MessagePart;
+    addToolResult: (result: { toolCallId: string; result: string }) => void;
+}) {
     switch (part.type) {
         case 'text':
             return <div className="text-gray-700">{part.text}</div>;
@@ -93,7 +114,13 @@ function MessagePart({ part, addToolResult }) {
 }
 
 // Tool Invocation Component
-function ToolInvocation({ toolInvocation, addToolResult }) {
+function ToolInvocation({ 
+    toolInvocation, 
+    addToolResult 
+}: {
+    toolInvocation: ToolInvocationType;
+    addToolResult: (result: { toolCallId: string; result: string }) => void;
+}) {
     const callId = toolInvocation.toolCallId;
 
     switch (toolInvocation.toolName) {
@@ -109,7 +136,13 @@ function ToolInvocation({ toolInvocation, addToolResult }) {
 }
 
 // Confirmation Tool Component
-function AskForConfirmation({ toolInvocation, addToolResult }) {
+function AskForConfirmation({ 
+    toolInvocation, 
+    addToolResult 
+}: {
+    toolInvocation: ToolInvocationType;
+    addToolResult: (result: { toolCallId: string; result: string }) => void;
+}) {
     const callId = toolInvocation.toolCallId;
 
     switch (toolInvocation.state) {
@@ -151,7 +184,11 @@ function AskForConfirmation({ toolInvocation, addToolResult }) {
 }
 
 // Location Tool Component
-function GetLocation({ toolInvocation }) {
+function GetLocation({ 
+    toolInvocation 
+}: {
+    toolInvocation: ToolInvocationType;
+}) {
     switch (toolInvocation.state) {
         case 'call':
             return (
@@ -171,7 +208,11 @@ function GetLocation({ toolInvocation }) {
 }
 
 // Weather Tool Component
-function GetWeatherInformation({ toolInvocation }) {
+function GetWeatherInformation({ 
+    toolInvocation 
+}: {
+    toolInvocation: ToolInvocationType;
+}) {
     switch (toolInvocation.state) {
         case 'partial-call':
             return (
@@ -207,7 +248,7 @@ function ChatInput({
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }) {
     return (
-        <form onSubmit={handleSubmit} className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
+        <form onSubmit={handleSubmit} className="sticky bottom-0 left-0 right-0 bg-white border-t p-4">
             <div className="max-w-3xl mx-auto">
                 <input 
                     value={input} 
