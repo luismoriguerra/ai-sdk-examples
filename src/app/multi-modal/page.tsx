@@ -12,18 +12,18 @@ export default function Chat() {
 
     return (
         <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-            {messages.map(m => (
-                <div key={m.id} className="whitespace-pre-wrap">
-                    {m.role === 'user' ? 'User: ' : 'AI: '}
-                    {m.content}
+            {messages.map(message => (
+                <div key={message.id} className="whitespace-pre-wrap">
+                    {message.role === 'user' ? 'User: ' : 'AI: '}
+                    {message.content}
                     <div>
-                        {m?.experimental_attachments
+                        {message?.experimental_attachments
                             ?.filter(attachment =>
                                 attachment?.contentType?.startsWith('image/'),
                             )
                             .map((attachment, index) => (
                                 <Image
-                                    key={`${m.id}-${index}`}
+                                    key={`${message.id}-${index}`}
                                     src={attachment.url}
                                     width={500}
                                     height={500}
